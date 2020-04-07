@@ -19,7 +19,7 @@
         name: "{{ '{{' }} ansible_hostname {{ '}}' }}{{ rabbitmq_nodename_suffix }}"
 
   roles:
-    - mediapeers.rabbitmq
+    - mediafellow.rabbitmq
   tasks:
 
     - name: Get server hostnames for clustering

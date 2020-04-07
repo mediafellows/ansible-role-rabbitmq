@@ -50,8 +50,8 @@
 
 - name: Clone this role onto remote machine to be executed on boot
   git:
-    repo: https://github.com/mediapeers/ansible-role-rabbitmq.git
-    dest: /root/roles/mediapeers.rabbitmq
+    repo: https://github.com/mediafellows/ansible-role-rabbitmq.git
+    dest: /root/roles/mediafellows.rabbitmq
     version: master
     recursive: yes
     depth: 5
