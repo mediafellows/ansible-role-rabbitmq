@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: rabbitmq
   author: Stefan Horning, michaeljs1990
   description: RabbitMQ installation and configuration, optionally cluster on EC2.
   company: Mediapeers GmbH
