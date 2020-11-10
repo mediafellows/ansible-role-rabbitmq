@@ -72,6 +72,20 @@
     src: rabbit_bootup.yml.j2
     dest: /root/rabbit_bootup.yml
 
+- name: Check if rc.local is present
+  stat:
+    path: /etc/rc.local
+  register: rc_local_state
+
+- name: Make sure rc.local file is actually present before attempting to write into it
+  file:
+    src: rc.local
+    dest: /etc/rc.local
+    mode: 0755
+    owner: root
+    state: present
+  when: not rc_local_state.exists
+
 - name: Add ansible execution to bootup of instance (hooks intance up to cluster)
   lineinfile:
     dest: /etc/rc.local
