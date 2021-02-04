@@ -16,9 +16,9 @@ rabbitmq_ec2_region: all
 
 # Version pinning for Erlang versions to avoid incompatibilities with Rabbit
 # See https://www.rabbitmq.com/which-erlang.html
-# Before changing values here maek sure the versions exist in the Erlang repo!
-rabbitmq_erlang_apt_version: 20.3-1
-rabbitmq_esl_erlang_apt_version: 20.3.6
+# Before changing values here make sure the versions exist in the Erlang repo!
+rabbitmq_erlang_apt_version: 22.3.4.3-1
+rabbitmq_esl_erlang_apt_version: 22.3.4
 
 # No need to touch this! This is used by Ansible itself
 # to indicate if this role is invoked by the
