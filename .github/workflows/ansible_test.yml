@@ -13,11 +13,6 @@ jobs:
       - name: Remove uneeded apt repos (that cause issues)
         run: sudo rm /etc/apt/sources.list.d/yarn*
 
-      - name: Remove existing rabbitmq-server from CI runner
-        run: |
-          sudo apt-get -y purge rabbitmq-server
-          sudo apt-get -y autoremove
-
       - name: Checkout code from Github
         uses: actions/checkout@v2
 
