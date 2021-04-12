@@ -11,7 +11,7 @@ jobs:
     steps:
 
       - name: Remove uneeded apt repos (that cause issues)
-        run: sudo rm /etc/apt/sources.list.d/yarn*
+        run: sudo rm -rf /etc/apt/sources.list.d/yarn*
 
       - name: Checkout code from Github
         uses: actions/checkout@v2
