@@ -1,41 +1,14 @@
 # Tasks for installing and configuring RabbitMQ and custom plugins on the system
 
-- name: Add Erlang apt repo key
+- name: Add RabbitMQ apt repos key (erlang + rabbitmq-server cloudsmith apt repos)
   apt_key:
-    url: https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
+    url: "{{ item }}"
     state: present
+  with_items:
+    - "https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/gpg.E495BB49CC4BBE5B.key"
+    - "https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/gpg.9F4587F226208342.key"
 
-- name: Add Erlang apt repo, dependency for RabbitMQ (Ubuntu repo)
-  apt_repository:
-    repo: "deb http://packages.erlang-solutions.com/ubuntu {{ ansible_distribution_release }} contrib"
-    state: present
-    update_cache: yes
-  when: ansible_distribution == 'Ubuntu'
-
-- name: Add Erlang apt repo, dependency for RabbitMQ (Debian repo)
-  apt_repository:
-    repo: "deb http://packages.erlang-solutions.com/debian {{ ansible_distribution_release }} contrib"
-    state: present
-    update_cache: yes
-  when: ansible_distribution == 'Debian'
-
-- name: Add RabbitMQ apt repo key
-  apt_key:
-    url: https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc
-    state: present
-
-- name: Add RabbitMQ apt repo key
-  apt_key:
-    url: https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/gpg.E495BB49CC4BBE5B.key
-    state: present
-
-- name: Remove legacy RabbitMQ apt repo (Debian/Ubuntu)
-  apt_repository:
-    repo: "deb https://dl.bintray.com/rabbitmq/debian {{ ansible_distribution_release }} main"
-    state: absent
-    update_cache: yes
-
-- name: Add RabbitMQ apt repo (Debian/Ubuntu)
+- name: Add RabbitMQ apt repos (erlang + rabbitmq-server cloudsmith apt repos)
   apt_repository:
     repo: "{{ item }}"
     state: present
@@ -43,16 +16,12 @@
   with_items:
     - "deb https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/deb/ubuntu {{ ansible_distribution_release }} main"
     - "deb-src https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/deb/ubuntu {{ ansible_distribution_release }} main"
+    - "deb https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/deb/ubuntu {{ ansible_distribution_release }} main"
+    - "deb-src https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/deb/ubuntu {{ ansible_distribution_release }} main"
 
 # See https://stackoverflow.com/questions/32407164/the-vm-is-running-with-native-name-encoding-of-latin1-which-may-cause-elixir-to
 - name: Make sure LC_ALL locale is set to UTF-8
   command: update-locale LC_ALL=en_US.UTF-8
-
-# See https://www.rabbitmq.com/install-debian.html
-- name: Add APT version pinning config for Erlang, to avoid upgrading to versions unsupported by RabbitMQ
-  template:
-    src: erlang_apt_preferences.j2
-    dest: /etc/apt/preferences.d/erlang
 
 - name: Show hostname for RabbitMQ instance at time of installation
   shell: "hostname"
