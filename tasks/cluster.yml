@@ -5,7 +5,7 @@
 
 
 - name: Create Rabbit etc & var dirs manually as we only install Rabbit later
-  file:
+  ansible.builtin.file:
     path: '{{ item }}'
     state: directory
     mode: 0755
@@ -14,18 +14,18 @@
     - /var/lib/rabbitmq
 
 - name: Add Rabbit ENV config file to make sure full hostnames are used
-  template:
+  ansible.builtin.template:
     src: rabbitmq-env.conf.j2
     dest: /etc/rabbitmq/rabbitmq-env.conf
 
 - name: Ensure erlang cookies are the same among all instances
-  template:
+  ansible.builtin.template:
     src: erlang.cookie.j2
     dest: /var/lib/rabbitmq/.erlang.cookie
     mode: 0400
 
 - name: Install python-pip and other tools to install python packages/ansible
-  apt:
+  ansible.builtin.apt:
     name:
       - git-core
       - build-essential
@@ -38,7 +38,7 @@
     state: present
 
 - name: Install Boto & Ansible to run Ansible when instance comes up
-  pip:
+  ansible.builtin.pip:
     name:
       - pip
       - jinja2
@@ -49,7 +49,7 @@
     state: latest
 
 - name: Clone this role onto remote machine to be executed on boot
-  git:
+  ansible.builtin.git:
     repo: https://github.com/mediafellows/ansible-role-rabbitmq.git
     dest: /root/roles/mediafellows.rabbitmq
     version: master
@@ -58,27 +58,27 @@
     accept_hostkey: yes
 
 - name: Create ansible library dir in root folder
-  file:
+  ansible.builtin.file:
     path: /root/library
     state: directory
 
 - name: Put ansible.cfg into root dir to configure ansible library/role dirs
-  copy:
+  ansible.builtin.copy:
     src: ansible.cfg
     dest: /root/ansible.cfg
 
 - name: Place playbook using this role into /root
-  template:
+  ansible.builtin.template:
     src: rabbit_bootup.yml.j2
     dest: /root/rabbit_bootup.yml
 
 - name: Check if rc.local is present
-  stat:
+  ansible.builtin.stat:
     path: /etc/rc.local
   register: rc_local_state
 
 - name: Make sure rc.local file is actually present before attempting to write into it
-  file:
+  ansible.builtin.file:
     src: rc.local
     dest: /etc/rc.local
     mode: 0755
@@ -87,7 +87,7 @@
   when: not rc_local_state.exists
 
 - name: Add ansible execution to bootup of instance (hooks intance up to cluster)
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/rc.local
     insertbefore: 'exit 0'
     line: 'cd /root/ && /usr/local/bin/ansible-playbook rabbit_bootup.yml >> /var/log/rc.local.log 2>&1'

@@ -1,7 +1,7 @@
 # Tasks for installing and configuring RabbitMQ and custom plugins on the system
 
 - name: Add RabbitMQ apt repos key (erlang + rabbitmq-server cloudsmith apt repos)
-  apt_key:
+  ansible.builtin.apt_key:
     url: "{{ item }}"
     state: present
   with_items:
@@ -9,7 +9,7 @@
     - "https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/gpg.9F4587F226208342.key"
 
 - name: Add RabbitMQ apt repos (erlang + rabbitmq-server cloudsmith apt repos)
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "{{ item }}"
     state: present
     update_cache: yes
@@ -21,73 +21,79 @@
 
 # See https://stackoverflow.com/questions/32407164/the-vm-is-running-with-native-name-encoding-of-latin1-which-may-cause-elixir-to
 - name: Make sure LC_ALL locale is set to UTF-8
-  command: update-locale LC_ALL=en_US.UTF-8
+  ansible.builtin.command:
+    cmd: update-locale LC_ALL=en_US.UTF-8
 
-- name: Show hostname for RabbitMQ instance at time of installation
-  shell: "hostname"
+- name: Get hostname for RabbitMQ instance at time of installation
+  ansible.builtin.shell:
+    cmd: "hostname"
   register: hostname_return
-- debug: msg={{ hostname_return.stdout }}
+
+- name: Output collected hostname info
+  ansible.builtin.debug:
+    var: hostname_return.stdout
 
 - name: Install rabbitmq-server package (from RabbitMQ repo)
-  apt:
+  ansible.builtin.apt:
     name: rabbitmq-server
     state: present
 
 - name: Start rabbitmq-server in order to use the rabbitctl command in next task
-  service:
+  ansible.builtin.service:
     name: rabbitmq-server
     state: started
 
 - name: Get RabbitMQ plugins dir
-  shell: rabbitmqctl environment | grep -A 1 plugins_dir | grep -oE '"/.+"' | cut -d ':' -f 2 | tr -d '"'
+  ansible.builtin.shell:
+    cmd: rabbitmqctl environment | grep -A 1 plugins_dir | grep -oE '"/.+"' | cut -d ':' -f 2 | tr -d '"'
   register: rabbit_plugins_dir
 
 - name: Output RabbitMQ plugins path
-  debug:
-    msg: "{{ rabbit_plugins_dir.stdout }}"
+  ansible.builtin.debug:
+    var: rabbit_plugins_dir.stdout
 
 - name: Plugins to install, debug output
-  debug:
+  ansible.builtin.debug:
     msg: "files/{{ item }}.ez -> {{ rabbit_plugins_dir.stdout }}"
   with_items: '{{ rabbitmq_custom_plugins }}'
 
 - name: Place custom plugins into the plugins dir
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}.ez"
     dest: "{{ rabbit_plugins_dir.stdout }}"
   with_items: '{{ rabbitmq_custom_plugins }}'
 
 - name: Stop rabbitmq-server to add config file
-  service:
+  ansible.builtin.service:
     name: rabbitmq-server
     state: stopped
 
 - name: Configure rabbitmq-server
-  template:
+  ansible.builtin.template:
     src: rabbitmq.conf.j2
     dest: /etc/rabbitmq/rabbitmq.conf
 
 - name: Start rabbitmq-server to enable plugins and add users
-  service:
+  ansible.builtin.service:
     name: rabbitmq-server
     state: started
     enabled: yes
 
 - name: Enable custom plugins
-  rabbitmq_plugin:
+  community.rabbitmq.rabbitmq_plugin:
     name: "{{ item }}"
     state: enabled
   with_items: '{{ rabbitmq_custom_plugins }}'
 
 - name: Enable management plugin
-  rabbitmq_plugin:
+  community.rabbitmq.rabbitmq_plugin:
     new_only: yes # keeps previously installed plugins
     name: rabbitmq_management
     state: enabled
   when: rabbitmq_manage
 
 - name: Setup rabbitmq user with admin access (providing node name in FQDN/cluster mode)
-  rabbitmq_user:
+  community.rabbitmq.rabbitmq_user:
     user: "{{ rabbitmq_default_user }}"
     password: "{{ rabbitmq_default_pass }}"
     vhost: "{{ rabbitmq_default_vhost }}"
@@ -102,7 +108,7 @@
     - rabbitmq_cluster_bootup_play
 
 - name: Setup rabbitmq user with admin access (no node name, localhost mode)
-  rabbitmq_user:
+  community.rabbitmq.rabbitmq_user:
     user: "{{ rabbitmq_default_user }}"
     password: "{{ rabbitmq_default_pass }}"
     vhost: "{{ rabbitmq_default_vhost }}"
