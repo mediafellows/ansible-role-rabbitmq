@@ -1,3 +1,5 @@
 ---
 # vars file for rabbitmq role
 
+rabbitmq_cloudsmith_erlang_signing_key_location: /usr/share/keyrings/cloudsmith.rabbitmq-erlang.gpg
+rabbitmq_cloudsmith_rabbit_signing_key_location: /usr/share/keyrings/cloudsmith.rabbitmq-server.gpg

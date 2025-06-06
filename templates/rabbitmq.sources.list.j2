@@ -1,0 +1,20 @@
+# Sources list file as suggested by https://www.rabbitmq.com/docs/install-debian#apt-quick-start-cloudsmith
+# Make sure keys are installed into expected places first!
+
+## Provides modern Erlang/OTP releases
+##
+deb [arch=amd64 signed-by={{ rabbitmq_cloudsmith_erlang_signing_key_location }}] https://ppa1.rabbitmq.com/rabbitmq/rabbitmq-erlang/deb/ubuntu {{ ansible_distribution_release }} main
+deb-src [signed-by={{ rabbitmq_cloudsmith_erlang_signing_key_location }}] https://ppa1.rabbitmq.com/rabbitmq/rabbitmq-erlang/deb/ubuntu {{ ansible_distribution_release }} main
+
+# another mirror for redundancy
+deb [arch=amd64 signed-by={{ rabbitmq_cloudsmith_erlang_signing_key_location }}] https://ppa2.rabbitmq.com/rabbitmq/rabbitmq-erlang/deb/ubuntu {{ ansible_distribution_release }} main
+deb-src [signed-by={{ rabbitmq_cloudsmith_erlang_signing_key_location }}] https://ppa2.rabbitmq.com/rabbitmq/rabbitmq-erlang/deb/ubuntu {{ ansible_distribution_release }} main
+
+## Provides RabbitMQ
+##
+deb [arch=amd64 signed-by={{ rabbitmq_cloudsmith_rabbit_signing_key_location }}] https://ppa1.rabbitmq.com/rabbitmq/rabbitmq-server/deb/ubuntu {{ ansible_distribution_release }} main
+deb-src [signed-by={{ rabbitmq_cloudsmith_rabbit_signing_key_location }}] https://ppa1.rabbitmq.com/rabbitmq/rabbitmq-server/deb/ubuntu {{ ansible_distribution_release }} main
+
+# another mirror for redundancy
+deb [arch=amd64 signed-by={{ rabbitmq_cloudsmith_rabbit_signing_key_location }}] https://ppa2.rabbitmq.com/rabbitmq/rabbitmq-server/deb/ubuntu {{ ansible_distribution_release }} main
+deb-src [signed-by={{ rabbitmq_cloudsmith_rabbit_signing_key_location }}] https://ppa2.rabbitmq.com/rabbitmq/rabbitmq-server/deb/ubuntu {{ ansible_distribution_release }} main
