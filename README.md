@@ -1,4 +1,4 @@
-[![Ansible-Test](https://github.com/mediafellows/ansible-role-rabbitmq/workflows/Ansible-Test/badge.svg)](https://github.com/mediafellows/ansible-role-rabbitmq/actions?query=workflow%3AAnsible-Test)
+[![Ansible-Test](https://github.com/mediafellows/ansible-role-rabbitmq/actions/workflows/ansible_test.yml/badge.svg)](https://github.com/mediafellows/ansible-role-rabbitmq/actions/workflows/ansible_test.yml)
 
 # RabbitMQ
 RabbitMQ playbook that enables you to spin up a simple server or cluster them together. Currently only clustering on EC2 is supported.
