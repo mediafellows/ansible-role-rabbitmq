@@ -4,7 +4,7 @@
   vars:
     rabbitmq_default_user: travis
     rabbitmq_cluster: false
-    rabbitmq_custom_plugins:
-      - rabbitmq_metronome
+    rabbitmq_custom_plugins: []
+      # - rabbitmq_metronome # plugin file outdated
   roles:
     - ansible-role-rabbitmq
