@@ -13,7 +13,8 @@
 
 - name: Add Team RabbitMQs main apt signing key
   ansible.builtin.shell:
-    cmd: curl -1sLf "https://keys.openpgp.org/vks/v1/by-fingerprint/0A9AF2115F4687BD29803A206B73A36E6026DFCA" | sudo gpg --dearmor | sudo tee {{ rabbitmq_team_apt_signing_key_location }} > /dev/null
+    cmd: curl -1sLf "https://keys.openpgp.org/vks/v1/by-fingerprint/0A9AF2115F4687BD29803A206B73A36E6026DFCA" | gpg --dearmor | tee {{ rabbitmq_team_apt_signing_key_location }} > /dev/null
+    creates: "{{ rabbitmq_team_apt_signing_key_location }}"
 
 - name: Add RabbitMQ apt repos (erlang + rabbitmq-server repos) by adding sources.list
   ansible.builtin.template:
