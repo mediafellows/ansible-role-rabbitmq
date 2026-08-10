@@ -82,7 +82,7 @@
     state: started
     enabled: yes
 
-- name: Enable custom plugins
+- name: Enable custom plugins (from plugin files)
   community.rabbitmq.rabbitmq_plugin:
     name: "{{ item }}"
     state: enabled
@@ -95,7 +95,7 @@
     state: enabled
   when: rabbitmq_manage
 
-- name: Enable management plugin
+- name: Enable other builtin plugins
   community.rabbitmq.rabbitmq_plugin:
     new_only: yes # keeps previously installed plugins
     name: '{{ item }}'
