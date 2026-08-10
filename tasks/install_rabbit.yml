@@ -95,6 +95,13 @@
     state: enabled
   when: rabbitmq_manage
 
+- name: Enable management plugin
+  community.rabbitmq.rabbitmq_plugin:
+    new_only: yes # keeps previously installed plugins
+    name: '{{ item }}'
+    state: enabled
+  with: '{{ rabbitmq_standard_plugins }}'
+
 - name: Setup rabbitmq user with admin access (providing node name in FQDN/cluster mode)
   community.rabbitmq.rabbitmq_user:
     user: "{{ rabbitmq_default_user }}"

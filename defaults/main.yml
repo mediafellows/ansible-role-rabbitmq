@@ -20,7 +20,10 @@ rabbitmq_ec2_region: all
 # as it needs different behaviour in install_rabbit.yml tasks
 rabbitmq_cluster_bootup_play: false
 
-# Plugins
+# Intalling Rabbit Plugins
+# enabling builtin plugins
+rabbitmq_standard_plugins: []
+# from custom plugin file
 rabbitmq_custom_plugins: []
 
 # RabbitMQ user premissions
