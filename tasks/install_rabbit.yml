@@ -100,7 +100,7 @@
     new_only: yes # keeps previously installed plugins
     name: '{{ item }}'
     state: enabled
-  with: '{{ rabbitmq_standard_plugins }}'
+  with_items: '{{ rabbitmq_standard_plugins }}'
 
 - name: Setup rabbitmq user with admin access (providing node name in FQDN/cluster mode)
   community.rabbitmq.rabbitmq_user:

@@ -5,6 +5,8 @@
     rabbitmq_default_user: travis
     rabbitmq_cluster: false
     rabbitmq_custom_plugins: []
-      # - rabbitmq_metronome # plugin file outdated
+      # - rabbitmq_metronome # plugin file outdateod
+    rabbitmq_standard_plugins:
+      - rabbitmq_federation
   roles:
     - ansible-role-rabbitmq
